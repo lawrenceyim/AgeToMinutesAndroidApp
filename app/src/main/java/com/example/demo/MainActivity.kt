@@ -28,22 +28,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun clickDatePicker() {
+    private fun clickDatePicker() {
         val myCalendar = Calendar.getInstance()
         val year = myCalendar.get(Calendar.YEAR)
         val month = myCalendar.get(Calendar.MONTH)
         val day = myCalendar.get(Calendar.DAY_OF_MONTH)
         val dpd = DatePickerDialog(this,
-        DatePickerDialog.OnDateSetListener() { view, year, month, day ->
+        DatePickerDialog.OnDateSetListener() { _, year, month, day ->
             val selectedDate = "$day/${month + 1}/$year"
             tvSelectedDate?.text = selectedDate
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
             val theDate = sdf.parse(selectedDate)
-            val minutes = theDate.time / 60000
-            val currentDate = sdf.parse(sdf.format(System.currentTimeMillis()))
-            val currentMinutes = currentDate.time / 60000
-            val minuteDelta = currentMinutes - minutes
-            tvMinutes?.text = minuteDelta.toString()
+            theDate?.let {
+                val minutes = theDate.time / 60000
+                val currentDate = sdf.parse(sdf.format(System.currentTimeMillis()))
+                currentDate?.let {
+                    val currentMinutes = currentDate.time / 60000
+                    val minuteDelta = currentMinutes - minutes
+                    tvMinutes?.text = minuteDelta.toString()
+                }
+            }
                                              },
                 year,
                 month,
